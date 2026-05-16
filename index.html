@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora IAR | eFootball Mobile</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --primary-color: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background-color: var(--panel-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 80px;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .input-group label {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: #0f172a;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(16, 185, 129, 0.4);
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 20px 0;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: #000;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background-color: #059669;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            text-align: center;
+            padding: 20px;
+            background-color: #0f172a;
+            border-radius: 8px;
+            border: 1px dashed var(--primary-color);
+        }
+
+        .result-box h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .result-value {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .info-section h3 {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Calculadora IAR</h1>
+        <div class="subtitle">Índice de Agilidad Real | eFootball Mobile</div>
+
+        <!-- Bloque de Stats -->
+        <div class="input-group">
+            <label>Conservación del Balón (TP)</label>
+            <input type="number" id="tp" value="90" min="40" max="99">
+        </div>
+        <div class="input-group">
+            <label>Equilibrio (Balance)</label>
+            <input type="number" id="bal" value="90" min="40" max="99">
+        </div>
+        <div class="input-group">
+            <label>Aceleración (Acceleration)</label>
+            <input type="number" id="acc" value="90" min="40" max="99">
+        </div>
+        <div class="input-group">
+            <label>Regate (Dribbling)</label>
+            <input type="number" id="reg" value="90" min="40" max="99">
+        </div>
+        <div class="input-group">
+            <label>Control de Balón (BC)</label>
+            <input type="number" id="bc" value="90" min="40" max="99">
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Bloque Físico Único -->
+        <div class="input-group">
+            <label>Altura según Piernas (cm)</label>
+            <input type="number" id="height" value="172" min="150" max="210">
+        </div>
+
+        <button onclick="calcularIAR()">Calcular Agilidad</button>
+
+        <div class="result-box" id="result-container" style="display: none;">
+            <h2>Índice IAR Final</h2>
+            <div class="result-value" id="iar-result">0.00</div>
+        </div>
+
+        <!-- Sección de Definición Resumida -->
+        <div class="info-section">
+            <h3>¿Qué es el IAR?</h3>
+            <p>El <strong>Índice de Agilidad Real (IAR)</strong> es una métrica avanzada diseñada para traducir las estadísticas planas de eFootball Mobile en el rendimiento real que sentirás al jugar. El motor de juego no se basa en una sola estadística para regatear, sino en una compleja interacción entre el control del balón y las físicas corporales del jugador.</p>
+            <p>Esta calculadora evalúa la Frecuencia de Toque de Balón (BTF) ponderando las cinco estadísticas más influyentes (Conservación, Equilibrio, Aceleración, Regate y Control). Además, aplica un ajuste de inercia basado en la <strong>altura según longitud de piernas</strong>; de esta forma, el sistema simula cómo los modelos con palancas más cortas y centros de gravedad óptimos logran cambios de dirección más eléctricos en comparación con los jugadores de zancada larga.</p>
+        </div>
+    </div>
+
+    <script>
+        function calcularIAR() {
+            // Obtener valores de las stats
+            const tp = parseFloat(document.getElementById('tp').value) || 0;
+            const bal = parseFloat(document.getElementById('bal').value) || 0;
+            const acc = parseFloat(document.getElementById('acc').value) || 0;
+            const reg = parseFloat(document.getElementById('reg').value) || 0;
+            const bc = parseFloat(document.getElementById('bc').value) || 0;
+            
+            // Obtener valor físico único
+            const height = parseFloat(document.getElementById('height').value) || 172;
+
+            // 1. Calcular la nota base ponderada sobre 100%
+            const notaBase = (tp * 0.30) + (bal * 0.25) + (acc * 0.20) + (reg * 0.15) + (bc * 0.10);
+
+            // 2. Calcular el multiplicador físico de inercia
+            // El sweet spot competitivo del juego se sitúa en torno a los 172 cm.
+            // Los cm por debajo de 172 actúan como bonificación, y por encima como penalización.
+            let factorFisico = 1 + ((172 - height) / 250);
+
+            // Límite de seguridad para que el factor no altere de manera irreal la nota base
+            factorFisico = Math.max(0.80, Math.min(1.15, factorFisico));
+
+            // 3. Resultado Final
+            const iar = notaBase * factorFisico;
+
+            // Mostrar el resultado animado en la interfaz
+            const resultBox = document.getElementById('result-container');
+            const resultElement = document.getElementById('iar-result');
+            
+            resultBox.style.display = 'block';
+            
+            resultElement.style.opacity = 0;
+            setTimeout(() => {
+                let displayValue = iar > 99.99 ? 99.99 : iar;
+                resultElement.innerText = displayValue.toFixed(2);
+                resultElement.style.transition = "opacity 0.5s ease";
+                resultElement.style.opacity = 1;
+                
+                // Distribución de Tiers competitivos por colores
+                if (displayValue >= 88) {
+                    resultElement.style.color = "#a855f7"; // Morado (Meta de Agilidad)
+                } else if (displayValue >= 80) {
+                    resultElement.style.color = "#10b981"; // Verde (Excelente)
+                } else if (displayValue >= 70) {
+                    resultElement.style.color = "#eab308"; // Amarillo (Bueno)
+                } else {
+                    resultElement.style.color = "#ef4444"; // Rojo (Pesado / Tronco)
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
